@@ -14,10 +14,10 @@ public class Main {
 
     private static void printOutData() {
         String url = "jdbc:sqlite:test.db";
-        String sql = "SELECT name, age FROM users";
+        String sql = "SELECT * FROM users";
         try(Connection conn = DriverManager.getConnection(url);
             PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.getResultSet()){
+            ResultSet rs = stmt.executeQuery()){
             while(rs.next()){
                 System.out.println(rs.getString("name") + " | " + rs.getInt("age"));
             }
@@ -47,8 +47,8 @@ public class Main {
         String sql = """
         CREATE TABLE IF  NOT EXISTS users (
         id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL,
-        age INTEGER NOT NULL
+        name TEXT,
+        age INTEGER
         );
         """;
         try(Connection conn = DriverManager.getConnection(url);
