@@ -1,7 +1,6 @@
 package org.example;
-import java.sql.DriverManager;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -10,6 +9,22 @@ public class Main {
         createNewTable();
         insertData("Uzair", 20);
         insertData("Ahmed", 18);
+        printOutData();
+    }
+
+    private static void printOutData() {
+        String url = "jdbc:sqlite:test.db";
+        String sql = "SELECT name, age FROM users";
+        try(Connection conn = DriverManager.getConnection(url);
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.getResultSet()){
+            while(rs.next()){
+                System.out.println(rs.getString("name") + " | " + rs.getInt("age"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void insertData(String name, int age) {
