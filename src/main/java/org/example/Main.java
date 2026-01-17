@@ -9,6 +9,7 @@ public class Main {
         connect();
         createNewTable();
         insertData("Uzair", 20);
+        insertData("Ahmed", 18);
     }
 
     private static void insertData(String name, int age) {
