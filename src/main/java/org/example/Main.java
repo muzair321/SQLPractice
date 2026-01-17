@@ -10,11 +10,29 @@ public class Main {
         insertData("Uzair", 20);
         insertData("Ahmed", 18);
         printOutData();
+        deleteById(1);
+    }
+
+    private static void deleteById(int i) {
+        String url = "jdbc:sqlite:test.db";
+        String sql = "DELETE FROM users WHERE id = ?";
+        try(Connection conn = DriverManager.getConnection(url);
+        PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, 1);
+            int rows = stmt.executeUpdate();
+            if(rows > 0){
+                System.out.println("User Deleted");
+            }else{
+                System.out.println("User Does Not Exist");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void printOutData() {
         String url = "jdbc:sqlite:test.db";
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT name, age FROM users";
         try(Connection conn = DriverManager.getConnection(url);
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery()){
