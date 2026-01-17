@@ -6,11 +6,26 @@ import java.sql.*;
 public class Main {
     public static void main(String[] args) {
         connect();
-        createNewTable();
-        insertData("Uzair", 20);
-        insertData("Ahmed", 18);
+        createNewUsersTable();
+        createNewBooksTable();
+        insertUserData("Uzair", 20);
+        insertUserData("Ahmed", 18);
         printOutData();
         deleteById(1);
+    }
+
+    private static void createNewBooksTable() {
+        String url = "jdbc:sqlite:test.db";
+        String sql = "CREATE TABLE IF NOT EXISTS books(" +
+                "id INTEGER PRIMARY KEY," +
+                "name TEXT UNIQUE," +
+                "author TEXT," +
+                "user_id INTEGER," +
+                "FOREIGN KEY (user_id)" +
+                "   REFERENCES users(id)" +
+                "   ON DELETE CASCADE" +
+                ");";
+
     }
 
     private static void deleteById(int i) {
@@ -45,7 +60,7 @@ public class Main {
         }
     }
 
-    private static void insertData(String name, int age) {
+    private static void insertUserData(String name, int age) {
         String url = "jdbc:sqlite:test.db";
         String sql = "INSERT INTO users(name, age) VALUES(?, ?)";
         try(Connection conn = DriverManager.getConnection(url);
@@ -59,7 +74,7 @@ public class Main {
         }
     }
 
-    private static void createNewTable() {
+    private static void createNewUsersTable() {
 
         String url = "jdbc:sqlite:test.db";
         String sql = """
@@ -82,6 +97,7 @@ public class Main {
     private static void connect() {
         String url = "jdbc:sqlite:test.db";
         try(Connection conn = DriverManager.getConnection(url)){
+            conn.createStatement().execute("PRAGMA foreign_keys = ON");
             if(conn != null){
                 System.out.println("Connected");
             }
